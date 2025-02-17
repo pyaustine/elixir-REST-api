@@ -6,6 +6,8 @@ defmodule Forum.Accounts.User do
     field :name, :string
     field :email, :string
 
+    has_many :posts, Forum.Posts.Post
+
     timestamps(type: :utc_datetime)
   end
 
