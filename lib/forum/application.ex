@@ -11,8 +11,7 @@ defmodule Forum.Application do
       ForumWeb.Telemetry,
       Forum.Repo,
       {Ecto.Migrator,
-        repos: Application.fetch_env!(:forum, :ecto_repos),
-        skip: skip_migrations?()},
+       repos: Application.fetch_env!(:forum, :ecto_repos), skip: skip_migrations?()},
       {DNSCluster, query: Application.get_env(:forum, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Forum.PubSub},
       # Start the Finch HTTP client for sending emails
