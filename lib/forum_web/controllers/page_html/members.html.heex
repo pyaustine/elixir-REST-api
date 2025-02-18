@@ -34,56 +34,58 @@
   <!-- Members Grid -->
   <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
     <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      <!-- Member Card 1 -->
-      <%= for member <- @members do %>
-      <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-        <div class="relative">
-          <img src="https://ui-avatars.com/api/?name=Sarah+Johnson&background=6366f1&color=fff" alt="Sarah Johnson" class="w-full h-48 object-cover" />
-          <div class="absolute top-0 right-0 m-4">
-            <span class="bg-green-500 px-2 py-1 rounded-full text-xs text-white">Online</span>
+      <%= for member <- Enum.slice(@members, (@page - 1) * 4, 4) do %>
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+          <div class="relative">
+            <img src={"https://ui-avatars.com/api/?name=#{String.replace(member.name, " ", "+")}&background=6366f1&color=fff"} 
+                 alt={member.name} 
+                 class="w-full h-48 object-cover" />
+            <div class="absolute top-0 right-0 m-4">
+              <span class="bg-green-500 px-2 py-1 rounded-full text-xs text-white">Online</span>
+            </div>
+          </div>
+          
+          <div class="p-6">
+            <h3 class="text-xl font-semibold text-gray-900"><%= member.name %></h3>
+            <p class="text-sm text-gray-600 mt-1"><%= member.email %></p>
+            <p class="text-sm text-gray-500 mt-1">Age: <%= member.age %></p>
+            <div class="mt-4 flex items-center">
+              <span class="text-xs text-gray-500">Member since: Jan 2025</span>
+            </div>
+            <div class="mt-4 flex gap-2">
+              <button class="flex-1 bg-indigo-100 text-indigo-700 px-4 py-2 rounded-md text-sm hover:bg-indigo-200">
+                View Profile
+              </button>
+              <button class="flex-1 bg-indigo-600 text-white px-4 py-2 rounded-md text-sm hover:bg-indigo-700">
+                Connect
+              </button>
+            </div>
           </div>
         </div>
-        
-        <div class="p-6">
-          <h3 class="text-xl font-semibold text-gray-900"><%= member.name %></h3>
-          <p class="text-sm text-gray-600 mt-1"><%= member.email %></p>
-          <p class="text-sm text-gray-500 mt-1">Age: <%= member.age %></p>
-          <div class="mt-4 flex items-center">
-            <span class="text-xs text-gray-500">Member since: Jan 2025</span>
-          </div>
-          <div class="mt-4 flex gap-2">
-            <button class="flex-1 bg-indigo-100 text-indigo-700 px-4 py-2 rounded-md text-sm hover:bg-indigo-200">
-              View Profile
-            </button>
-            <button class="flex-1 bg-indigo-600 text-white px-4 py-2 rounded-md text-sm hover:bg-indigo-700">
-              Connect
-            </button>
-          </div>
-        </div>
-      </div>
       <% end %>
-
-      
     </div>
 
     <!-- Pagination -->
     <div class="mt-12 flex justify-center">
       <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-        <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-          Previous
-        </a>
-        <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
-          1
-        </a>
-        <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-indigo-50 text-sm font-medium text-indigo-600 hover:bg-gray-50">
-          2
-        </a>
-        <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
-          3
-        </a>
-        <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-          Next
-        </a>
+        <%= if @page > 1 do %>
+          <a href={"?page=#{@page - 1}"} class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+            Previous
+          </a>
+        <% end %>
+        
+        <%= for page_num <- 1..ceil(length(@members)/4) do %>
+          <a href={"?page=#{page_num}"} 
+             class={"relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium #{if page_num == @page, do: "bg-indigo-50 text-indigo-600", else: "bg-white text-gray-700"} hover:bg-gray-50"}>
+            <%= page_num %>
+          </a>
+        <% end %>
+
+        <%= if @page < ceil(length(@members)/4) do %>
+          <a href={"?page=#{@page + 1}"} class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+            Next
+          </a>
+        <% end %>
       </nav>
     </div>
   </div>
